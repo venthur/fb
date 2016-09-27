@@ -75,8 +75,12 @@ class Board(object):
         c_orig = self.data[0][0]
         self.data[0][0] = c
         stack = [(0, 0)]
+        visited = set()
         while stack:
             x, y = stack.pop()
+            if (x, y) in visited:
+                continue
+            visited.add((x, y))
             for xn, yn in self.get_neighbours(x, y):
                 if self.data[xn][yn] == c_orig:
                     stack.append((xn, yn))
@@ -91,10 +95,7 @@ class Board(object):
             number of connected tiles
 
         """
-        # this works similar to the `set_color` above, but since we
-        # can't use the coloring to prevent infinite loops in the
-        # visiting of tiles we keep track of tiles visited using a set
-        # of coordinates `visited`
+        # this works similar to the `set_color` above
         c = 0
         stack = [(0, 0)]
         visited = set()
@@ -148,7 +149,6 @@ def play(board, colors):
         connected_color_map.sort()
         c_win = connected_color_map[-1][1]
         board.set_color(c_win)
-
 
 
 if __name__ ==  "__main__":
